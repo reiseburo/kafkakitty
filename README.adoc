@@ -1,0 +1,5 @@
+= kafkakitty
+
+Kafkakitty is a kafkacat-inspired utility which brings Kafka messages to your
+browser in real-time. Similar to the offtopic project, kafkakitty allows easy
+following of Kafka topics.
