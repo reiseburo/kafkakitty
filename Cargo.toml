@@ -8,11 +8,7 @@ edition = "2018"
 rocket = "~0.4.2"
 # Used for embedding templates
 rust-embed = "~5.1.0"
-
-[dependencies.rocket_contrib]
-version = "0.4.2"
-default-features = false
-features = ["handlebars_templates"]
+websocket = "~0.24.0"
 
 [dependencies.rdkafka]
 version = "~0.20.0"
