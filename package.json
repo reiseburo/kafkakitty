@@ -1,0 +1,20 @@
+{
+  "name": "kafkakitty",
+  "version": "1.0.0",
+  "description": "A cuter kafka cat",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "keywords": [
+    "kafka"
+  ],
+  "author": "R Tyler Croy",
+  "license": "AGPL-3.0",
+  "dependencies": {
+    "vue": "^2.6.10"
+  },
+  "devDependencies": {
+    "vue-cli": "^2.9.6"
+  }
+}
