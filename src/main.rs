@@ -2,19 +2,19 @@
 
 #[macro_use]
 extern crate rocket;
-extern crate websocket;
+extern crate tungstenite;
 #[macro_use]
 extern crate rust_embed;
 
-
-use std::ffi::OsStr;
-use std::io::Cursor;
-use std::path::PathBuf;
-use std::thread;
 use rocket::http::{ContentType, Status};
 use rocket::response;
-use websocket::sync::Server;
-use websocket::OwnedMessage;
+use std::ffi::OsStr;
+use std::io::Cursor;
+use std::net::TcpListener;
+use std::path::PathBuf;
+use std::thread;
+use std::thread::spawn;
+use tungstenite::server::accept;
 
 #[derive(RustEmbed)]
 #[folder="assets"]
@@ -46,51 +46,26 @@ fn assets<'r>(file: PathBuf) -> response::Result<'r> {
 }
 
 fn websocket() {
-    let server = Server::bind("127.0.0.1:8001").unwrap();
+    /// A WebSocket echo server
+    let server = TcpListener::bind("127.0.0.1:8001").unwrap();
+    for stream in server.incoming() {
+        println!("Connection..");
+        spawn (move || {
+            let mut websocket = accept(stream.unwrap()).unwrap();
+            loop {
+                let msg = websocket.read_message().unwrap();
+                println!("Received {}", msg);
 
-    for request in server.filter_map(Result::ok) {
-        // Spawn a new thread for each connection.
-        thread::spawn(|| {
-            if !request.protocols().contains(&"rust-websocket".to_string()) {
-                request.reject().unwrap();
-                return;
-            }
-
-            let mut client = request.use_protocol("rust-websocket").accept().unwrap();
-
-            let ip = client.peer_addr().unwrap();
-
-            println!("Connection from {}", ip);
-
-            let message = OwnedMessage::Text("Hello".to_string());
-            client.send_message(&message).unwrap();
-
-            let (mut receiver, mut sender) = client.split().unwrap();
-
-            for message in receiver.incoming_messages() {
-                let message = message.unwrap();
-
-                match message {
-                    OwnedMessage::Close(_) => {
-                        let message = OwnedMessage::Close(None);
-                        sender.send_message(&message).unwrap();
-                        println!("Client {} disconnected", ip);
-                        return;
-                    }
-                    OwnedMessage::Ping(ping) => {
-                        let message = OwnedMessage::Pong(ping);
-                        sender.send_message(&message).unwrap();
-                    }
-                    _ => sender.send_message(&message).unwrap(),
+                // We do not want to send back ping/pong messages.
+                if msg.is_binary() || msg.is_text() {
+                    websocket.write_message(msg).unwrap();
                 }
             }
         });
     }
-
 }
 
 fn main() {
-
     thread::spawn(|| {
         websocket()
     });
