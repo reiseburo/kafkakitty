@@ -1,11 +1,29 @@
 <html>
     <head>
-        <title>😻 Kafkakitty 😻</title>
+        <title>Kafkakitty 😻</title>
         <script type="text/javascript" src="/assets/main.js"></script>
+        <script type="text/javascript" src="/assets/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" media="screen" href="/assets/css/bootstrap.min.css"/>
+        <link rel="stylesheet" media="screen" href="/assets/css/bootstrap-grid.min.css"/>
+        <link rel="stylesheet" media="screen" href="/assets/css/bootstrap-reboot.min.css"/>
     </head>
     <body>
-        <div class="masthead">
-            Kafkakitty
+        <div class="container-fluid">
+            <h1>
+                Kafkakitty 😺
+            </h1>
+        </div>
+
+        <div class="container">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1">Message Limit:</span>
+                </div>
+                <input type="text" class="form-control" value="128" aria-label="Username" aria-describedby="basic-addon1">
+            </div>
+        </div>
+
+        <div class="container-fluid" id="messages">
         </div>
     </body>
 </html>
