@@ -513,6 +513,7 @@ dependencies = [
  "clap",
  "crossbeam",
  "futures",
+ "log 0.4.8",
  "rdkafka",
  "rocket",
  "rust-embed",
