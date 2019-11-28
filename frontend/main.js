@@ -7,7 +7,7 @@ Vue.config.productionTip = false
 
 console.log('Kafkakitty bootstrapping..')
 
-function wsConnect () {
+function wsConnect (app) {
   const socket = new WebSocket('ws://localhost:8001')
   socket.onopen = (event) => {
     console.log('Kafkakitty connected! 😺')
@@ -31,11 +31,11 @@ function wsConnect () {
     container.insertBefore(d, container.firstChild)
   }
 }
-wsConnect()
-
 /* eslint-disable no-new */
-new Vue({
+const a = new Vue({
   el: '#app',
   components: { App },
   template: '<App/>'
 })
+
+wsConnect(a)
