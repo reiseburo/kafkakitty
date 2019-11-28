@@ -92,20 +92,8 @@ fn main() {
         .mount("/", routes![index, assets]).launch();
 }
 
-struct LoggingConsumerContext;
-
-impl ClientContext for LoggingConsumerContext {}
-
-impl ConsumerContext for LoggingConsumerContext {
-}
-
-// Define a new type for convenience
-type LoggingConsumer = StreamConsumer<LoggingConsumerContext>;
-
 fn consume_and_print(brokers: &str, group_id: &str, topics: &[&str], sender: Sender<String>) {
-    let context = LoggingConsumerContext;
-
-    let consumer: LoggingConsumer = ClientConfig::new()
+    let consumer: StreamConsumer = ClientConfig::new()
         .set("group.id", group_id)
         .set("bootstrap.servers", brokers)
         .set("enable.partition.eof", "false")
@@ -114,7 +102,7 @@ fn consume_and_print(brokers: &str, group_id: &str, topics: &[&str], sender: Sen
         //.set("statistics.interval.ms", "30000")
         //.set("auto.offset.reset", "smallest")
         .set_log_level(RDKafkaLogLevel::Debug)
-        .create_with_context(context)
+        .create()
         .expect("Consumer creation failed");
 
     consumer.subscribe(&topics.to_vec())
