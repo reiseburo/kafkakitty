@@ -1,6 +1,7 @@
 #![feature(proc_macro_hygiene, decl_macro)]
 
 extern crate crossbeam;
+extern crate open;
 extern crate rdkafka;
 #[macro_use]
 extern crate rocket;
@@ -29,6 +30,7 @@ use std::net::TcpListener;
 use std::path::PathBuf;
 use std::thread;
 use std::thread::spawn;
+use std::time::Duration;
 
 use tungstenite::server::accept;
 
@@ -107,6 +109,8 @@ fn main() {
              .takes_value(false))
         .get_matches();
 
+    let should_open = ! matches.is_present("no-open");
+
     let (sender, receiver) = crossbeam::channel::unbounded::<String>();
 
     /*
@@ -132,6 +136,15 @@ fn main() {
 
         consume(sender, brokers, group_id, &topics);
     });
+
+    if should_open {
+        thread::spawn(move || {
+            // Sleep for a second just to give the server a chance to bootstrap
+            thread::sleep(Duration::from_millis(1000));
+            open::that("http://localhost:8000/")
+                .expect("Unable to open a browser, you'll have to do that yourself!");
+        });
+    }
 
     // Launch the web app
     rocket::ignite()
