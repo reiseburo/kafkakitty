@@ -5,11 +5,18 @@ authors = ["R. Tyler Croy <rtyler@brokenco.de>"]
 edition = "2018"
 
 [dependencies]
+# Necessary for parsing command line arguments
+clap = "~2.18.0"
 rocket = "~0.4.2"
 # Used for embedding templates
 rust-embed = "~5.1.0"
 tungstenite = "~0.9.2"
+# Need to pin to an older futures to ensure that our consumer will compile
+# See <https://github.com/fede1024/rust-rdkafka/issues/180?
+futures = "0.1.21"
+# Necessary for passing messages from Kafka to multiple channels
+crossbeam = "~0.7.3"
 
 [dependencies.rdkafka]
-version = "~0.20.0"
+version = "0.21"
 features = ["ssl", "sasl"]
