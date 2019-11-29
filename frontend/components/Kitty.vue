@@ -1,11 +1,26 @@
 <template>
   <div class="kitty">
     <h1>Welcome to Kafkakitty 😺</h1>
+
+    <ul class="messages">
+      <li is="Message" v-for="msg in messages" :key="msg" :msg="msg"></li>
+    </ul>
   </div>
+
 </template>
 
 <script>
+import Message from './Message'
+
 export default {
-  name: 'Kitty'
+  name: 'Kitty',
+  components: {
+    Message
+  },
+  computed: {
+    messages () {
+      return this.$store.state.messages
+    }
+  }
 }
 </script>

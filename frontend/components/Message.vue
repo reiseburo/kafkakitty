@@ -1,12 +1,11 @@
 <template>
   <div class="message">
-
-    <span class="timestamp">{{timestamp}}</span>
+    <span class="timestamp"></span>
 
     <div class="body">
       <pre>
         <code>
-          {{body}}
+          {{msg}}
         </code>
       </pre>
     </div>
@@ -16,9 +15,8 @@
 <script>
 export default {
   name: 'Message',
-  data () {
-    return {
-    }
-  }
+  props: [
+    'msg'
+  ]
 }
 </script>
