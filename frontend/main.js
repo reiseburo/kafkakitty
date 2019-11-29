@@ -29,15 +29,11 @@ function wsConnect (app) {
   socket.onmessage = (event) => {
     const data = JSON.parse(event.data)
 
-    /*
-     * If this looks like some JSON data, then we might as well try to parse it
-     */
-    const jsony = ['{', '[', ']', '}']
-    if (jsony.includes(data.payload.charAt(0)) &&
-        (jsony.includes(data.payload.charAt(data.payload.length - 1)))) {
+    try {
       data.payload = JSON.parse(data.payload)
+    } catch (e) {
+      // swallow the error
     }
-
     socket.app.$store.commit('receive', data)
   }
 }
