@@ -518,6 +518,8 @@ dependencies = [
  "rdkafka",
  "rocket",
  "rust-embed",
+ "serde",
+ "serde_json",
  "tungstenite",
 ]
 
@@ -1123,6 +1125,9 @@ name = "serde"
 version = "1.0.103"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1217f97ab8e8904b57dd22eb61cde455fa7446a9c1cf43966066da047c1f3702"
+dependencies = [
+ "serde_derive",
+]
 
 [[package]]
 name = "serde_derive"

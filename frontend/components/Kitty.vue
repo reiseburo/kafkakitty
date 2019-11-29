@@ -3,7 +3,7 @@
     <h1>Welcome to Kafkakitty 😺</h1>
 
     <ul class="messages">
-      <li is="Message" v-for="msg in messages" :key="msg" :msg="msg"></li>
+      <li is="Message" v-for="msg in messages" :key="msg.offset" :msg="msg"></li>
     </ul>
   </div>
 

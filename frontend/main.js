@@ -26,8 +26,8 @@ function wsConnect (app) {
   }
 
   socket.onmessage = (event) => {
-    console.log(`Received: ${event.data}`)
-    socket.app.$store.commit('receive', event.data)
+    const data = JSON.parse(event.data)
+    socket.app.$store.commit('receive', data)
   }
 }
 

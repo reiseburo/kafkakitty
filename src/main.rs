@@ -52,7 +52,7 @@ fn main() {
 
     let should_open = ! matches.is_present("no-open");
 
-    let (sender, receiver) = crossbeam::channel::unbounded::<String>();
+    let (sender, receiver) = crossbeam::channel::unbounded::<kafka::KittyMessage>();
 
     /*
      * Kafkakitty requires at minimum three threads:

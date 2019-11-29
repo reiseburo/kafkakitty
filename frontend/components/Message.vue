@@ -1,11 +1,20 @@
 <template>
   <div class="message">
     <span class="timestamp"></span>
+    <span class="offset">
+      {{msg.offset}}
+    </span>
+    <span class="partition">
+      {{msg.partition}}
+    </span>
+    <span class="topic">
+      {{msg.topic}}
+    </span>
 
     <div class="body">
       <pre>
         <code>
-          {{msg}}
+          {{msg.payload}}
         </code>
       </pre>
     </div>
