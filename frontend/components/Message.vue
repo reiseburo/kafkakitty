@@ -11,21 +11,26 @@
       {{msg.topic}}
     </span>
 
-    <div class="body">
-      <pre>
-        <code>
-          {{msg.payload}}
-        </code>
-      </pre>
-    </div>
+    <json-viewer
+      :value="msg.payload"
+      :expand-depth=5
+      copyable
+      boxed
+      sort>
+    </json-viewer>
   </div>
 </template>
 
 <script>
+import JsonViewer from 'vue-json-viewer'
+
 export default {
   name: 'Message',
   props: [
     'msg'
+  ],
+  components: [
+    JsonViewer
   ]
 }
 </script>

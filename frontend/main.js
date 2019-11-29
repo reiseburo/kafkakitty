@@ -2,6 +2,7 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import Vuex from 'vuex'
+import JsonViewer from 'vue-json-viewer'
 import App from './App'
 
 Vue.config.productionTip = false
@@ -27,10 +28,21 @@ function wsConnect (app) {
 
   socket.onmessage = (event) => {
     const data = JSON.parse(event.data)
+
+    /*
+     * If this looks like some JSON data, then we might as well try to parse it
+     */
+    const jsony = ['{', '[', ']', '}']
+    if (jsony.includes(data.payload.charAt(0)) &&
+        (jsony.includes(data.payload.charAt(data.payload.length - 1)))) {
+      data.payload = JSON.parse(data.payload)
+    }
+
     socket.app.$store.commit('receive', data)
   }
 }
 
+Vue.use(JsonViewer)
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
