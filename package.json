@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "vue": "^2.5.2",
+    "vue-json-viewer": "^2.2.8",
     "vuex": "^3.1.2"
   },
   "devDependencies": {
