@@ -1,17 +1,13 @@
 <template>
   <div class="message">
-    <span class="timestamp"></span>
-    <span class="offset">
-      {{msg.offset}}
-    </span>
-    <span class="partition">
-      {{msg.partition}}
-    </span>
-    <span class="topic">
-      {{msg.topic}}
-    </span>
+    <div class="metadata">
+      <code>{{msg.offset}}</code>
+      <strong>{{msg.topic}}</strong>
+      ({{msg.partition}})
+    </div>
 
     <json-viewer
+      class="json"
       :value="msg.payload"
       :expand-depth=5
       copyable
@@ -34,3 +30,22 @@ export default {
   ]
 }
 </script>
+
+<style>
+.message {
+  display: contents;
+  text-align: left;
+}
+
+.metadata {
+  grid-column: 1;
+  text-align: right;
+  font-size: 10px;
+  padding-top: 5px;
+  padding-right: 20px;
+}
+
+.json {
+  grid-column: 2 / 10;
+}
+</style>

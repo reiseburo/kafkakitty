@@ -24,3 +24,10 @@ export default {
   }
 }
 </script>
+
+<style>
+.messages {
+  display: grid;
+  grid-gap: 3px;
+}
+</style>

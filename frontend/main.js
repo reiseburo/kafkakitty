@@ -51,6 +51,9 @@ const store = new Vuex.Store({
   },
   mutations: {
     receive (state, message) {
+      if (state.messages.length > 128) {
+        state.messages.pop()
+      }
       state.messages.unshift(message)
     }
   }
