@@ -30,18 +30,16 @@ pub struct KittyMessage {
  *
  */
 pub fn consume(tx: Sender<KittyMessage>,
-           brokers: &str,
-           group_id: &str,
-           topics: &[&str]) {
+               settings: Vec<(String, String)>,
+               topics: &[&str]) {
 
-    let consumer: StreamConsumer = ClientConfig::new()
-        .set("group.id", group_id)
-        .set("bootstrap.servers", brokers)
-        .set("enable.partition.eof", "false")
-        .set("session.timeout.ms", "6000")
-        .set("enable.auto.commit", "true")
-        .create()
-        .expect("Consumer creation failed");
+    let mut config = ClientConfig::new();
+
+    for (key, value) in settings {
+        config.set(key.as_str(), value.as_str());
+    }
+
+    let consumer: StreamConsumer = config.create().expect("Consumer createion failed");
 
     consumer.subscribe(&topics.to_vec())
         .expect("Can't subscribe to specified topics");
