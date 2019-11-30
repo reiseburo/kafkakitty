@@ -22,7 +22,7 @@ interface can be found.
 
 [source,bash]
 ----
-Kafkakitty 😿 0.1.0
+Kafkakitty 😿 0.2.0
 A cute little Kafka consumer
 
 USAGE:
@@ -36,8 +36,17 @@ FLAGS:
 OPTIONS:
     -b, --brokers <brokers>      Broker list in kafka format [default: localhost:9092]
     -G, --group-id <group-id>    Consumer group ID for Kafka [default: kafkakitty]
+    -X <settings>...             Set a librdkafka configuration property
     -t, --topics <topics>...     List of topics to follow
 ----
+
+
+=== Configuration
+
+For the various additional properties which can be set through the `-X`
+command-line argument, the
+link:https://github.com/edenhill/librdkafka/blob/master/CONFIGURATION.md[librdkafka
+configuration] documents the possible options.
 
 
 [NOTE]
