@@ -7,10 +7,10 @@ use log::{info, warn};
 use rdkafka::config::ClientConfig;
 use rdkafka::consumer::stream_consumer::StreamConsumer;
 use rdkafka::consumer::{CommitMode, Consumer};
-use rdkafka::Message;
 use rdkafka::message::Headers;
+use rdkafka::Message;
 
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 
 /**
  * A KittyMessage contains the necessary metadata for sending the message over
@@ -29,10 +29,7 @@ pub struct KittyMessage {
  * topics and sending the message over the channel via the `tx` Sender
  *
  */
-pub fn consume(tx: Sender<KittyMessage>,
-               settings: Vec<(String, String)>,
-               topics: &[&str]) {
-
+pub fn consume(tx: Sender<KittyMessage>, settings: Vec<(String, String)>, topics: &[&str]) {
     let mut config = ClientConfig::new();
 
     for (key, value) in settings {
@@ -41,7 +38,8 @@ pub fn consume(tx: Sender<KittyMessage>,
 
     let consumer: StreamConsumer = config.create().expect("Consumer createion failed");
 
-    consumer.subscribe(&topics.to_vec())
+    consumer
+        .subscribe(&topics.to_vec())
         .expect("Can't subscribe to specified topics");
 
     for message in consumer.start().wait() {

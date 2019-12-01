@@ -10,7 +10,7 @@ pub fn serve(rx: Receiver<KittyMessage>) {
     let server = TcpListener::bind("localhost:8001").unwrap();
     for stream in server.incoming() {
         let channel = rx.clone();
-        spawn (move || {
+        spawn(move || {
             let mut websocket = accept(stream.unwrap()).unwrap();
             loop {
                 let msg = channel.recv().unwrap();
@@ -20,4 +20,3 @@ pub fn serve(rx: Receiver<KittyMessage>) {
         });
     }
 }
-
