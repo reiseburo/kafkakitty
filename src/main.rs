@@ -20,6 +20,8 @@ use log::warn;
 use std::thread;
 use std::time::Duration;
 
+use rocket::config::{Config, Environment};
+
 fn main() {
     let matches = App::new("Kafkakitty 😿")
         .version(option_env!("CARGO_PKG_VERSION").unwrap_or(""))
@@ -63,11 +65,19 @@ fn main() {
                 .takes_value(true)
                 .multiple(true),
         )
+        .arg(
+            Arg::with_name("bindhost")
+                .long("bind")
+                .help("Bind to an address other than localhost")
+                .takes_value(true)
+                .required(false)
+                .default_value("localhost")
+        )
         .get_matches();
 
     let should_open = !matches.is_present("no-open");
-
-    let mut settings: Vec<(String, String)> = vec![(String::from("group.id"), String::from("fo"))];
+    let bindhost = String::from(matches.value_of("bindhost").unwrap());
+    let mut settings: Vec<(String, String)> = vec![];
 
     // Default settings for librdkafka
     for (key, value) in [
@@ -128,8 +138,12 @@ fn main() {
     });
 
     thread::spawn(move || {
-        let topics = matches.values_of("topics").unwrap().collect::<Vec<&str>>();
-
+        /*
+         * Processing matches in this closure in order to prefer moving the matches reference into
+         * this thread, rather than computing topics outside the thread and then trying to move
+         * those string reference inside the thread.
+         */
+        let topics: Vec<&str> = matches.values_of("topics").unwrap().collect();
         kafka::consume(sender, settings, &topics);
     });
 
@@ -142,8 +156,13 @@ fn main() {
         });
     }
 
+    let web_config = Config::build(Environment::Development)
+        .address(bindhost)
+        .port(8000)
+        .finalize().unwrap();
+
     // Launch the web app
-    rocket::ignite()
+    rocket::custom(web_config)
         .mount("/", routes![routes::index, routes::assets])
         .launch();
 }
